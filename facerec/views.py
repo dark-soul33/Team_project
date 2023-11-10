@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .ML import predict
 import os
+from django.contrib.auth.decorators import login_required
 import pandas as pd
 
 from .forms import ImageForm
@@ -10,7 +11,7 @@ from .forms import ImageForm
 app_name = 'facerec'
 
 
-
+@login_required
 def upload_images(request):
     data = {'Name': []}
     if request.method == 'POST':
@@ -61,6 +62,6 @@ def upload_images(request):
     # Save the DataFrame to an Excel file
     output_file.to_excel('output.xlsx', index=False) 
     output_html = output_file.to_html(classes='table table-striped')
-    print(data)
+    # print(data)
 
     return render(request, 'upload_images.html', context = {'form': form,'output_html': output_html, 'names': data['Name'] })
