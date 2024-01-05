@@ -64,10 +64,15 @@
               <span class="nav__logo-name">Home</span>
             </a>
 
+             {% if user.is_authenticated %}
             <a href="{%url 'upload'%}" class="nav__link">
               <i class="bx bx-grid-alt nav__icon"></i>
               <span class="nav__name">Dashboard</span>
-            </a>
+             {% else %}
+            <a href="{%url 'login_or_register'%}" class="nav__link">
+              <i class="bx bx-grid-alt nav__icon"></i>
+              <span class="nav__name">Dashboard</span>
+             {% endif %}
 
             <a href="#pg2" class="nav__link">
               <i class="bx bx-folder nav__icon"></i>

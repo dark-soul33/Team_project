@@ -1,5 +1,5 @@
 <!-- upload_images.html -->
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -64,6 +64,10 @@
         border: 1px solid #ddd; /* Added border */
         border-radius: 5px; /* Rounded corners */
         background-color: #f9f9f9; /* Light background color */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
       }
 
       h2 {
@@ -104,6 +108,48 @@
         letter-spacing: 1px;   
         text-align:center
       }
+      form .date{
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      form .date input, form .file input{
+        outline: none;
+        border: 0px;
+        border-radius: 10px;
+        height: 50px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        color: #000;
+      }
+      form .file input{
+        margin-left: 100px;
+        margin-bottom: 10px;
+      }
+      .bar-container {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        width: 300px;  /* Adjust the width as needed */
+        border: 1px solid #ddd;
+        margin: 10px;
+    }
+
+    .present-bar {
+        height: 100%;
+        background-color: #4caf5078;  /* Green color for present students */
+        width: {{present_count}}%;
+        text-align:center;
+        border-radius:10px 0 0 10px;
+    }
+
+    .absent-bar {
+        height: 100%;
+        background-color: #d39498a8;  /* Red color for absent students */
+        width: {{ absent_count}}%;
+        text-align:center;
+        border-radius:0 10px 10px 0;
+    }
     </style>
     <link rel="stylesheet" href="{% static "index.css" %}" />
   </head>
@@ -174,11 +220,21 @@
       enctype="multipart/form-data"
     >
       {% csrf_token %}
-      <input type="file" name="images" multiple />
+      <div class="date">
+        <label for="date">Select Date:</label>
+        <input type="date" name="date" id="date" />
+      </div>
+      <div class="file">
+        <input type="file" name="images" multiple />
+      </div>
       <button type="submit" class="up btn">Upload Files</button>
     </form>
     {% if names %}
     <h2>Student Data</h2>
+    <div class="bar-container">
+      <div class="present-bar">{{present_count}}%</div>
+      <div class="absent-bar">{{absent_count}}%</div>
+    </div>
     <a href="?download=true" class ="up">Download Excel File</a>
     {{ output_html|safe }} 
     <!-- Display the DataFrame table -->

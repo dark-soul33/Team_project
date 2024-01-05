@@ -53,15 +53,17 @@ def upload_images(request):
         
         
     attend = pd.DataFrame(data)
+    present_count =round((len(attend)/83)*100,2)
+    absent_count = round(100-present_count,2)
     refer = pd.read_csv('reference.csv') 
     output_file = refer.copy()
     attend['Status']='Present'
     attend=attend.drop_duplicates()
     output_file = output_file.merge(attend, on='Name', how='left')
-    output_file['Status'].fillna('absent', inplace=True)
+    output_file['Status'].fillna('Absent', inplace=True)
     # Save the DataFrame to an Excel file
     output_file.to_excel('output.xlsx', index=False) 
     output_html = output_file.to_html(classes='table table-striped')
-    # print(data)
+    # print(data['Name'])
 
-    return render(request, 'upload_images.html', context = {'form': form,'output_html': output_html, 'names': data['Name'] })
+    return render(request, 'upload_images.html', context = {'form': form,'output_html': output_html, 'names': data['Name'] ,'present_count': present_count,'absent_count': absent_count})
